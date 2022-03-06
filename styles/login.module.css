@@ -1,0 +1,13 @@
+.from_block {
+  @apply flex items-start justify-center p-4 pt-20;
+  flex-grow: 1;
+}
+.from_sign {
+  @apply flex flex-col items-center justify-center rounded-md p-5 shadow-2xl;
+}
+.input {
+  @apply m-1 block w-full rounded-full border border-slate-400 bg-transparent p-2 outline-0 focus:shadow-inner md:w-80;
+}
+.login_btn {
+  @apply m-1  cursor-pointer rounded-md bg-purple-500 p-2 px-4  capitalize text-white shadow-lg hover:bg-purple-700 hover:shadow;
+}

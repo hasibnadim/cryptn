@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+html,
+body,
+#__next {
+  @apply h-full overflow-x-hidden bg-blue-100 text-slate-900 dark:bg-slate-900 dark:text-slate-50;
+}
+
+@layer components {
+  .btn {
+    @apply m-px cursor-pointer rounded-md bg-purple-600 px-4 py-2 text-slate-300 shadow-md hover:bg-blue-400 hover:shadow dark:text-white;
+  }
+  .article_block {
+    @apply m-1 my-3 rounded-lg bg-slate-200  shadow-sm hover:shadow-lg dark:bg-slate-700;
+    max-height: 1024px;
+    width: calc(100% - 8px);
+  }
+  .balance_card {
+    @apply mx-auto flex flex-col p-5;
+  }
+}
+.about_header {
+  background: linear-gradient(180deg, #2577f6, transparent);
+  width: 100vw;
+  height: 50vh;
+}
+.about_header img {
+  width: 100vw;
+  height: 50vh;
+  object-fit: cover;
+  object-position: top;
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(to bottom, #2577f6, transparent);
+}
+@media screen and (max-width: 768px) {
+  .about_header img {
+    height: 30vh;
+  }
+}

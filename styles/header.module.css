@@ -1,0 +1,30 @@
+.header {
+  @apply bg-blue-400 p-1;
+}
+.header nav {
+  @apply container mx-auto flex items-center justify-between;
+}
+.option_btn:hover + .option_list {
+  @apply visible opacity-100;
+}
+.option_list:hover {
+  @apply visible opacity-100;
+}
+.option_list {
+  @apply invisible absolute w-48 bg-blue-400 transition-all;
+}
+.app_list {
+  @apply invisible absolute right-0 flex w-64 flex-wrap justify-between bg-blue-400 p-1 transition-all 2xl:right-auto;
+}
+.app_list li {
+  @apply flex w-16 cursor-pointer flex-col items-center rounded p-1 hover:bg-blue-500 dark:text-black;
+}
+.app_btn:hover + .app_list {
+  @apply visible opacity-100;
+}
+.app_list:hover {
+  @apply visible opacity-100;
+}
+.option_list li {
+  @apply m-1 cursor-pointer rounded  p-1 hover:bg-blue-500;
+}
