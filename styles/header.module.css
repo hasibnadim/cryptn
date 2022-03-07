@@ -11,7 +11,7 @@
   @apply visible opacity-100;
 }
 .option_list {
-  @apply invisible absolute w-48 bg-blue-400 transition-all;
+  @apply invisible absolute right-0 w-48 bg-blue-400 transition-all 2xl:right-auto;
 }
 .app_list {
   @apply invisible absolute right-0 flex w-64 flex-wrap justify-between bg-blue-400 p-1 transition-all 2xl:right-auto;

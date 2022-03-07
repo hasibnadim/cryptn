@@ -27,6 +27,8 @@ const Login: NextPage = () => {
     messagingSenderId: '494623498635',
     appId: '1:494623498635:web:c9485d18739701e5a30f8e',
   })
+
+
   // Configure FirebaseUI.
   const uiConfig = {
     // Popup signin flow rather than redirect flow.

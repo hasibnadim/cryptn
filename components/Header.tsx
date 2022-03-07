@@ -9,7 +9,7 @@ import Brightness6Icon from '@mui/icons-material/Brightness6'
 import LogoutIcon from '@mui/icons-material/Logout'
 import InfoIcon from '@mui/icons-material/Info'
 import { IconButton } from '@mui/material'
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered'
+
 import NoteIcon from '@mui/icons-material/Note';
 import GroupIcon from '@mui/icons-material/Group';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
@@ -27,11 +27,11 @@ export default function Header(): JSX.Element {
   const setupThem = () => {
     let theme = localStorage.getItem('_crtptheme')
     if (theme === 'dark') {
-      document.querySelector('body')?.classList.add('dark')
+      document.querySelector('html')?.classList.add('dark')
       setThemeTitle('Light')
     }
     if (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.querySelector('body')?.classList.add('dark')
+      document.querySelector('html')?.classList.add('dark')
       setThemeTitle('Light')
     }
   }
@@ -93,10 +93,10 @@ export default function Header(): JSX.Element {
         ? 'dark'
         : 'light')
     if (currentTheme === 'dark') {
-      document.querySelector('body')?.classList.remove('dark')
+      document.querySelector('html')?.classList.remove('dark')
       setThemeTitle('Dark')
     } else {
-      document.querySelector('body')?.classList.add('dark')
+      document.querySelector('html')?.classList.add('dark')
       setThemeTitle('Light')
     }
     localStorage.setItem(
@@ -108,7 +108,7 @@ export default function Header(): JSX.Element {
     <header className={hstyle.header}>
       <nav>
         <Link href="/">
-          <span className="cursor-pointer font-sans text-lg">{siteName}</span>
+          <span className="brand_name">{siteName}</span>
         </Link>
         <div>
           <Link href="/">
@@ -135,10 +135,6 @@ export default function Header(): JSX.Element {
             <AppsIcon />
           </IconButton>
           <ul className={hstyle.app_list}>
-            <li className="">
-              <FormatListNumberedIcon />
-              <span className="text-xs">Todos</span>
-            </li>
             <li className="">
               <NoteIcon />
               <span className="text-xs">Notes</span>

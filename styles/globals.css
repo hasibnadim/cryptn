@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@600&family=League+Spartan:wght@300&family=Montserrat:wght@300&family=Noto+Serif:ital@1&display=swap');
 html,
 body,
 #__next {
@@ -19,6 +20,19 @@ body,
   .balance_card {
     @apply mx-auto flex flex-col p-5;
   }
+  .tab {
+    @apply flex w-full cursor-pointer items-center justify-center rounded-md p-1 text-center  text-xs shadow  hover:bg-blue-300 hover:shadow-xl dark:hover:bg-slate-800 lg:text-sm;
+  }
+  .brand_name {
+    @apply cursor-pointer rounded-lg px-1 font-sans text-lg hover:shadow-xl;
+    font-family: 'League Spartan', sans-serif;
+  }
+}
+.todo_text:hover + .delete_btn {
+  @apply visible opacity-100;
+}
+.delete_btn:hover {
+  @apply visible opacity-100;
 }
 .about_header {
   background: linear-gradient(180deg, #2577f6, transparent);
