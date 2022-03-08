@@ -1,10 +1,8 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
+
 import { useStateValue } from '../service/Store'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
@@ -27,7 +25,6 @@ const Login: NextPage = () => {
     messagingSenderId: '494623498635',
     appId: '1:494623498635:web:c9485d18739701e5a30f8e',
   })
-
 
   // Configure FirebaseUI.
   const uiConfig = {
@@ -55,21 +52,17 @@ const Login: NextPage = () => {
         <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
+
       <div className={lstyle.from_block}>
         <div className={lstyle.from_sign}>
           <p className="text-yellow-600 dark:text-yellow-400">{q.warningmsg}</p>
-          <h1 className='p-1 text-lg'>Let's continue with</h1>
+          <h1 className="p-1 text-lg">Let's continue with</h1>
           <StyledFirebaseAuth
             uiConfig={uiConfig}
             firebaseAuth={firebase.auth()}
           />
-         
-
-        
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

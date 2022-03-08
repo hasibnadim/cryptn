@@ -5,9 +5,11 @@
 html,
 body,
 #__next {
-  @apply h-full overflow-x-hidden bg-blue-100 text-slate-900 dark:bg-slate-900 dark:text-slate-50;
+  @apply h-full bg-blue-100 text-slate-900 dark:bg-slate-900 dark:text-slate-50;
 }
-
+* {
+  box-sizing: border-box;
+}
 @layer components {
   .btn {
     @apply m-px cursor-pointer rounded-md bg-purple-600 px-4 py-2 text-slate-300 shadow-md hover:bg-blue-400 hover:shadow dark:text-white;
@@ -27,6 +29,16 @@ body,
     @apply cursor-pointer rounded-lg px-1 font-sans text-lg hover:shadow-xl;
     font-family: 'League Spartan', sans-serif;
   }
+  .about_card {
+    @apply m-5 inline-flex w-full flex-col items-center justify-center rounded-md bg-blue-200 p-2 py-5 shadow hover:shadow-lg dark:bg-blue-500 md:w-auto lg:m-0;
+  }
+  .min-h {
+    min-height: calc(100% - 80px);
+  }
+}
+.todo_container {
+  @apply min-h;
+  max-width: 768px;
 }
 .todo_text:hover + .delete_btn {
   @apply visible opacity-100;
@@ -36,19 +48,13 @@ body,
 }
 .about_header {
   background: linear-gradient(180deg, #2577f6, transparent);
-  width: 100vw;
+  width: 100%;
   height: 50vh;
+  font-family: 'League Spartan', sans-serif;
 }
-.about_header img {
-  width: 100vw;
-  height: 50vh;
-  object-fit: cover;
-  object-position: top;
-  mix-blend-mode: multiply;
-  mask-image: linear-gradient(to bottom, #2577f6, transparent);
-}
+
 @media screen and (max-width: 768px) {
-  .about_header img {
+  .about_header {
     height: 30vh;
   }
 }

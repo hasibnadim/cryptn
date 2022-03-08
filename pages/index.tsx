@@ -5,7 +5,6 @@ import type {
 } from 'next'
 import Head from 'next/head'
 import Field from '../components/field'
-import Header from '../components/Header'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let news = await fetch(
@@ -22,12 +21,11 @@ const Home: NextPage = ({
   news,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <div className="h-full dark:bg-slate-900 dark:text-slate-50">
+    <div className="min-h dark:bg-slate-900 dark:text-slate-50">
       <Head>
         <title>Home</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
       <Field News={news} />
     </div>
   )

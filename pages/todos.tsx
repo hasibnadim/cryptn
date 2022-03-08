@@ -1,27 +1,33 @@
+import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import IconButton from '@mui/material/IconButton'
+import { useStateValue } from '../service/Store'
+
 interface todo {
   id: number
-  inProgress: Boolean
+  inProcess: Boolean
   text: String
 }
 const Todos = () => {
   const [todoInput, setTodoInput] = useState('')
   const [todoList, setTodoList] = useState<todo[]>([])
+  const [{ user }] = useStateValue()
+
   const addTodo = (e: any) => {
     e.preventDefault()
     var newTodo = [
+      ...todoList,
       {
-        id: todoList.length + 1,
-        inProgress: false,
+        id: Date.now(),
+        inProcess: false,
         text: todoInput,
       },
-      ...todoList,
     ]
+    setTodoInput('')
     setTodoList(newTodo)
     localStorage.setItem('todos', JSON.stringify(newTodo))
   }
@@ -33,16 +39,31 @@ const Todos = () => {
   const complated = (id: number) => {
     removeTodo(id)
   }
-  const inProgress = (id: number) => {
-    let targetedTodo: todo = todoList[id - 1]
-    targetedTodo = {
-      id: targetedTodo.id,
-      inProgress: !targetedTodo.inProgress,
-      text: targetedTodo.text,
-    }
-    todoList[id - 1] = targetedTodo
-    localStorage.setItem('todos', JSON.stringify(todoList))
-    setTodoList([...todoList])
+  const inProcess = (id: number) => {
+    let processing: any = []
+    let newtodoList: any = []
+    todoList.map((v) => {
+      if (v.id === id) {
+        if (v.inProcess === true)
+          newtodoList.push({
+            id: v.id,
+            inProcess: !v.inProcess,
+            text: v.text,
+          })
+        else
+          processing.push({
+            id: v.id,
+            inProcess: !v.inProcess,
+            text: v.text,
+          })
+      } else newtodoList.push(v)
+    })
+
+    localStorage.setItem(
+      'todos',
+      JSON.stringify([...processing, ...newtodoList])
+    )
+    setTodoList([...processing, ...newtodoList])
   }
   const deleteIt = (id: number) => {
     if (confirm('Are you sure to delete the todo?')) removeTodo(id)
@@ -53,27 +74,35 @@ const Todos = () => {
   }, [])
 
   return (
-    <div className="mx-auto flex w-full flex-col items-center p-2 lg:w-3/5">
-      <div className=" w-full p-2">
+    <div className="todo_container mx-auto py-3 px-1">
+      <Head>
+        <title>Todos {user.name ? `| ${user.name}` : ''}</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className="">
+        {todoList.length === 0 && (
+          <p className="py-4 text-center text-lg">WOW, I am free now.😎</p>
+        )}
         {todoList.map((t, key) => (
           <p
             key={key}
-            className="my-2 flex cursor-pointer items-center justify-between rounded-md  p-1 shadow hover:shadow-lg"
+            className="my-2 flex cursor-pointer items-center justify-between rounded-md  shadow hover:shadow-lg md:p-1"
           >
             <span className="inline-block w-32">
               <IconButton
                 onClick={() => complated(t.id)}
+                color="success"
                 title="Comoplate"
-                className="text-green-700"
               >
                 <CheckCircleOutlineIcon />
               </IconButton>
+
               <IconButton
-                onClick={() => inProgress(t.id)}
+                onClick={() => inProcess(t.id)}
                 title="In progress"
-                className="text-blue-400"
+                color="primary"
               >
-                {t.inProgress ? (
+                {t.inProcess == true ? (
                   <CheckCircleIcon />
                 ) : (
                   <CheckCircleOutlineIcon />
@@ -85,7 +114,8 @@ const Todos = () => {
             </span>
             <IconButton
               onClick={() => deleteIt(t.id)}
-              className="delete_btn invisible text-red-400 opacity-0"
+              color="error"
+              className="delete_btn invisible opacity-0"
             >
               <DeleteForeverIcon />
             </IconButton>
@@ -101,7 +131,7 @@ const Todos = () => {
           name="todo"
           autoComplete="off"
           autoCorrect="true"
-          className="w-full bg-transparent p-1 px-5 outline-none md:text-xl"
+          className="w-full bg-transparent p-1 px-3 outline-none md:text-xl"
           id="todo"
           value={todoInput}
           required

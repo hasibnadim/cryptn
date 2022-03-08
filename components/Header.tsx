@@ -9,11 +9,16 @@ import Brightness6Icon from '@mui/icons-material/Brightness6'
 import LogoutIcon from '@mui/icons-material/Logout'
 import InfoIcon from '@mui/icons-material/Info'
 import { IconButton } from '@mui/material'
+import SettingsIcon from '@mui/icons-material/Settings'
+import NoteIcon from '@mui/icons-material/Note'
+import GroupIcon from '@mui/icons-material/Group'
+import FindInPageIcon from '@mui/icons-material/FindInPage'
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import WorkIcon from '@mui/icons-material/Work'
+import CreateIcon from '@mui/icons-material/Create'
 
-import NoteIcon from '@mui/icons-material/Note';
-import GroupIcon from '@mui/icons-material/Group';
-import FindInPageIcon from '@mui/icons-material/FindInPage';
-import MessageIcon from '@mui/icons-material/Message';
+import MessageIcon from '@mui/icons-material/Message'
 import { useStateValue } from '../service/Store'
 import { getAuth, signOut } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -21,7 +26,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 export default function Header(): JSX.Element {
   const auth = getAuth()
   const [themeTitle, setThemeTitle] = useState('Dark')
-  const [{ siteName,user }, dispatch] = useStateValue()
+  const [{ siteName, user }, dispatch] = useStateValue()
   const [newuser, loading, error] = useAuthState(auth)
 
   const setupThem = () => {
@@ -135,9 +140,31 @@ export default function Header(): JSX.Element {
             <AppsIcon />
           </IconButton>
           <ul className={hstyle.app_list}>
+            <Link href="/todos">
+              <li className="">
+                <FormatListNumberedIcon />
+                <span className="text-xs">Todos</span>
+              </li>
+            </Link>
             <li className="">
               <NoteIcon />
               <span className="text-xs">Notes</span>
+            </li>
+            <li className="">
+              <FindInPageIcon />
+              <span className="text-xs">Resource</span>
+            </li>
+            <li className="">
+              <CreateIcon />
+              <span className="text-xs">Create</span>
+            </li>
+            <li className="">
+              <ShoppingCartIcon />
+              <span className="text-xs">Shop</span>
+            </li>
+            <li className="">
+              <WorkIcon />
+              <span className="text-xs">Jobs</span>
             </li>
             <li className="">
               <GroupIcon />
@@ -147,10 +174,6 @@ export default function Header(): JSX.Element {
               <MessageIcon />
               <span className="text-xs">Message</span>
             </li>
-            <li className="">
-              <FindInPageIcon />
-              <span className="text-xs">Resource</span>
-            </li>
           </ul>
           {/* App list design */}
 
@@ -159,20 +182,31 @@ export default function Header(): JSX.Element {
           </IconButton>
 
           <ul className={hstyle.option_list}>
+            {user?.name && (
+              <Link href={'/about'}>
+                <li className="flex items-center">
+                  <span className="dark:text-white">
+                    <SettingsIcon />
+                  </span>
+                  <span className="mx-auto">Settings</span>
+                </li>
+              </Link>
+            )}
+            <Link href={'/about'}>
+              <li className="flex items-center">
+                <span className="dark:text-white">
+                  <InfoIcon />
+                </span>
+                <span className="mx-auto">About Us</span>
+              </li>
+            </Link>
             <li onClick={toggleTheme} className="flex items-center">
               <span className="dark:text-white">
-                <Brightness6Icon />{' '}
+                <Brightness6Icon />
               </span>
               <span className="mx-auto">{themeTitle}</span>
             </li>
-            <Link href={'/about'} >
-            <li className="flex items-center">
-              <span className="dark:text-white">
-                <InfoIcon />
-              </span>
-              <span className="mx-auto">About Us</span>
-            </li>
-            </Link>
+
             {user?.name && (
               <li className="flex items-center" onClick={logOut}>
                 <LogoutIcon />
