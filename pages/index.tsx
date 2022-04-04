@@ -4,7 +4,9 @@ import type {
   InferGetServerSidePropsType,
 } from 'next'
 import Head from 'next/head'
+import { ReactElement } from 'react'
 import Field from '../components/field'
+import WebLayout from '../components/WebLayout'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let news = await fetch(
@@ -17,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-const Home: NextPage = ({
+const Home = ({
   news,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
@@ -30,5 +32,11 @@ const Home: NextPage = ({
     </div>
   )
 }
-
+Home.getLayout=function getLayout(page:ReactElement){
+  return (
+    <WebLayout>
+      {page}
+    </WebLayout>
+  )
+}
 export default Home

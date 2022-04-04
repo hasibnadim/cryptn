@@ -1,7 +1,7 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 
 import { useStateValue } from '../service/Store'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
@@ -10,8 +10,9 @@ import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 
 import lstyle from '../styles/login.module.css'
+import WebLayout from '../components/WebLayout'
 
-const Login: NextPage = () => {
+const Login = () => {
   const router = useRouter()
 
   const q = router.query
@@ -36,8 +37,9 @@ const Login: NextPage = () => {
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-      firebase.auth.GithubAuthProvider.PROVIDER_ID,
+      //firebase.auth.GithubAuthProvider.PROVIDER_ID,
     ],
+
   }
 
   useEffect(() => {
@@ -66,5 +68,11 @@ const Login: NextPage = () => {
     </div>
   )
 }
-
+Login.getLayout=function getLayout(page:ReactElement){
+  return (
+    <WebLayout>
+      {page}
+    </WebLayout>
+  )
+}
 export default Login

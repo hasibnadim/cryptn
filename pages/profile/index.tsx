@@ -1,8 +1,8 @@
-import { NextPage } from 'next'
+
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-import React, { useEffect } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import Dashbord from '../../components/Profile/Dashbord'
 
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
@@ -10,6 +10,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard'
 import { useStateValue } from '../../service/Store'
 import Wallet from '../../components/Profile/Wallet'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next/types'
+import WebLayout from '../../components/WebLayout'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   let weather = await fetch(
@@ -22,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-const Profile: NextPage = ({
+const Profile = ({
   weather,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
@@ -92,6 +93,13 @@ const Profile: NextPage = ({
         </div>
       )}
     </div>
+  )
+}
+Profile.getLayout=function getLayout(page:ReactElement){
+  return (
+    <WebLayout>
+      {page}
+    </WebLayout>
   )
 }
 export default Profile

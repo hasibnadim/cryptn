@@ -1,10 +1,11 @@
 import Head from 'next/head'
-import React from 'react'
+import React, { ReactElement } from 'react'
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact'
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter'
 import TravelExploreIcon from '@mui/icons-material/TravelExplore'
 import DoneIcon from '@mui/icons-material/Done'
 import { useStateValue } from '../service/Store'
+import WebLayout from '../components/WebLayout'
 
 const About = () => {
   const [{ siteName }] = useStateValue()
@@ -72,5 +73,11 @@ const About = () => {
     </div>
   )
 }
-
+About.getLayout=function getLayout(page:ReactElement){
+  return (
+    <WebLayout>
+      {page}
+    </WebLayout>
+  )
+}
 export default About

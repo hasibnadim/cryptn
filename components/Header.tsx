@@ -8,7 +8,7 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore'
 import Brightness6Icon from '@mui/icons-material/Brightness6'
 import LogoutIcon from '@mui/icons-material/Logout'
 import InfoIcon from '@mui/icons-material/Info'
-import { IconButton } from '@mui/material'
+import { CircularProgress, IconButton } from '@mui/material'
 import SettingsIcon from '@mui/icons-material/Settings'
 import NoteIcon from '@mui/icons-material/Note'
 import GroupIcon from '@mui/icons-material/Group'
@@ -17,7 +17,7 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import WorkIcon from '@mui/icons-material/Work'
 import CreateIcon from '@mui/icons-material/Create'
-
+import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
 import MessageIcon from '@mui/icons-material/Message'
 import { useStateValue } from '../service/Store'
 import { getAuth, signOut } from 'firebase/auth'
@@ -49,6 +49,9 @@ export default function Header(): JSX.Element {
             type: 'SET_USER',
             payload: {
               loading: false,
+              isLogin: false,
+              uid: '',
+              token: '',
               name: '',
               email: '',
               photoUrl: '',
@@ -62,23 +65,46 @@ export default function Header(): JSX.Element {
   }
 
   useEffect(() => {
-    setupThem()
     if (!loading) {
-      if (!error) {
-        dispatch({
-          type: 'SET_USER',
-          payload: {
-            loading: false,
-            name: newuser?.displayName || '',
-            email: newuser?.email || '',
-            photoUrl: newuser?.photoURL || '',
-          },
-        })
+      if (newuser) {
+        newuser
+          ?.getIdToken()
+          .then((token) => {
+            dispatch({
+              type: 'SET_USER',
+              payload: {
+                loading: false,
+                isLogin: true,
+                uid: newuser?.uid || '',
+                token: token || '',
+                name: newuser?.displayName || '',
+                email: newuser?.email || '',
+                photoUrl: newuser?.photoURL || '',
+              },
+            })
+          })
+          .catch((err) => {
+            dispatch({
+              type: 'SET_USER',
+              payload: {
+                loading: false,
+                isLogin: false,
+                uid: '',
+                token: '',
+                name: '',
+                email: '',
+                photoUrl: '',
+              },
+            })
+          })
       } else {
         dispatch({
           type: 'SET_USER',
           payload: {
             loading: false,
+            isLogin: false,
+            uid: '',
+            token: '',
             name: '',
             email: '',
             photoUrl: '',
@@ -91,6 +117,9 @@ export default function Header(): JSX.Element {
     // })
   }, [newuser, error, loading])
 
+  useEffect(() => {
+    setupThem()
+  }, [])
   function toggleTheme() {
     let currentTheme =
       localStorage.getItem('_crtptheme') ||
@@ -109,6 +138,30 @@ export default function Header(): JSX.Element {
       currentTheme === 'dark' ? 'light' : 'dark'
     )
   }
+  var profileIcon = (
+    <>
+      {loading && (
+        <IconButton>
+          <CircularProgress size={'1.3rem'} />
+        </IconButton>
+      )}
+
+      {!loading &&
+        (user.name ? (
+          <Link href="/profile">
+            <IconButton>
+              <img src={user.photoUrl} className="w-6 rounded-full" />
+            </IconButton>
+          </Link>
+        ) : (
+          <Link href="/login">
+            <IconButton>
+              <LoginIcon />
+            </IconButton>
+          </Link>
+        ))}
+    </>
+  )
   return (
     <header className={hstyle.header}>
       <nav>
@@ -121,19 +174,8 @@ export default function Header(): JSX.Element {
               <TravelExploreIcon />
             </IconButton>
           </Link>
-          {user?.name ? (
-            <Link href="/profile">
-              <IconButton>
-                <img src={user?.photoUrl} className="w-6 rounded-full" />
-              </IconButton>
-            </Link>
-          ) : (
-            <Link href="/login">
-              <IconButton>
-                <LoginIcon />
-              </IconButton>
-            </Link>
-          )}
+
+          {profileIcon}
 
           {/* App list design */}
           <IconButton className={hstyle.app_btn}>
@@ -146,7 +188,18 @@ export default function Header(): JSX.Element {
                 <span className="text-xs">Todos</span>
               </li>
             </Link>
+            <Link href="/os">
+              <li className="">
+                <AutoFixNormalIcon />
+                <span className="text-xs">C-OS</span>
+              </li>
+            </Link>
             <li className="">
+              <WorkIcon />
+              <span className="text-xs">Jobs</span>
+            </li>
+            
+            {/*  <li className="">
               <NoteIcon />
               <span className="text-xs">Notes</span>
             </li>
@@ -173,7 +226,7 @@ export default function Header(): JSX.Element {
             <li className="">
               <MessageIcon />
               <span className="text-xs">Message</span>
-            </li>
+            </li> */}
           </ul>
           {/* App list design */}
 

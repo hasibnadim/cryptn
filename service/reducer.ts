@@ -1,8 +1,8 @@
-import { initialValueTypes } from './Store'
+import { Action, initialValueType } from './Store'
 
 export const reducer = (
-  state: initialValueTypes,
-  action: { type: String; payload: any }
+  state: initialValueType,
+  action: Action
 ) => {
   switch (action.type) {
     case 'SET_USER':
