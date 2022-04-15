@@ -22,7 +22,6 @@ const Todos = () => {
     <div className="todo_container mx-auto py-3 px-1">
       <Head>
         <title>Todos {user.name ? `| ${user.name}` : ''}</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       
       <Form onAdd={addTodo} />

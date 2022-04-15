@@ -8,15 +8,16 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
-
+import DoneIcon from '@mui/icons-material/Done';
 import lstyle from '../styles/login.module.css'
 import WebLayout from '../components/WebLayout'
+import Link from 'next/link'
 
 const Login = () => {
   const router = useRouter()
 
   const q = router.query
-  const [{ user }] = useStateValue()
+  const [{ user, siteName }] = useStateValue()
 
   firebase.initializeApp({
     apiKey: 'AIzaSyByaIp19WulwPm9s3xfZ1azAFVvQIWIgAw',
@@ -39,7 +40,6 @@ const Login = () => {
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
       //firebase.auth.GithubAuthProvider.PROVIDER_ID,
     ],
-
   }
 
   useEffect(() => {
@@ -52,7 +52,6 @@ const Login = () => {
     <div className="flex h-full flex-col">
       <Head>
         <title>Login</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div className={lstyle.from_block}>
@@ -63,16 +62,24 @@ const Login = () => {
             uiConfig={uiConfig}
             firebaseAuth={firebase.auth()}
           />
+          <p className='text-sm text-gray-600'>
+            <DoneIcon color='primary' /> I am agree with {siteName}{' '}
+            <Link href={'/about'}>
+              <a className="hover:text-blue-600 hover:underline">Terms and Condition</a>
+            </Link> <br />
+            <DoneIcon color='primary' />  I will follow {siteName} {' '}
+            <Link href={'/about'}>
+              <a className="hover:text-blue-600 hover:underline">
+                Community guidelines
+              </a>
+            </Link>
+          </p>
         </div>
       </div>
     </div>
   )
 }
-Login.getLayout=function getLayout(page:ReactElement){
-  return (
-    <WebLayout>
-      {page}
-    </WebLayout>
-  )
+Login.getLayout = function getLayout(page: ReactElement) {
+  return <WebLayout>{page}</WebLayout>
 }
 export default Login

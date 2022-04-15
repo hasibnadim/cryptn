@@ -4,31 +4,24 @@ import hstyle from '../styles/header.module.css'
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle'
 import LoginIcon from '@mui/icons-material/Login'
 import AppsIcon from '@mui/icons-material/Apps'
-import TravelExploreIcon from '@mui/icons-material/TravelExplore'
+import BlurCircularOutlinedIcon from '@mui/icons-material/BlurCircularOutlined'
 import Brightness6Icon from '@mui/icons-material/Brightness6'
 import LogoutIcon from '@mui/icons-material/Logout'
 import InfoIcon from '@mui/icons-material/Info'
 import { CircularProgress, IconButton } from '@mui/material'
-import SettingsIcon from '@mui/icons-material/Settings'
-import NoteIcon from '@mui/icons-material/Note'
-import GroupIcon from '@mui/icons-material/Group'
-import FindInPageIcon from '@mui/icons-material/FindInPage'
+import VideoLibraryIcon from '@mui/icons-material/VideoLibrary'
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import WorkIcon from '@mui/icons-material/Work'
-import CreateIcon from '@mui/icons-material/Create'
-import AutoFixNormalIcon from '@mui/icons-material/AutoFixNormal';
-import MessageIcon from '@mui/icons-material/Message'
+import CallSplitIcon from '@mui/icons-material/CallSplit';
+import HistoryIcon from '@mui/icons-material/History';
+import WebhookIcon from '@mui/icons-material/Webhook'
 import { useStateValue } from '../service/Store'
 import { getAuth, signOut } from 'firebase/auth'
-import { useAuthState } from 'react-firebase-hooks/auth'
 
-export default function Header(): JSX.Element {
+export default function Header() {
   const auth = getAuth()
   const [themeTitle, setThemeTitle] = useState('Dark')
   const [{ siteName, user }, dispatch] = useStateValue()
-  const [newuser, loading, error] = useAuthState(auth)
-
+  const [deferredPrompt, setDeferredPrompt] = useState<any>()
   const setupThem = () => {
     let theme = localStorage.getItem('_crtptheme')
     if (theme === 'dark') {
@@ -64,62 +57,6 @@ export default function Header(): JSX.Element {
     }
   }
 
-  useEffect(() => {
-    if (!loading) {
-      if (newuser) {
-        newuser
-          ?.getIdToken()
-          .then((token) => {
-            dispatch({
-              type: 'SET_USER',
-              payload: {
-                loading: false,
-                isLogin: true,
-                uid: newuser?.uid || '',
-                token: token || '',
-                name: newuser?.displayName || '',
-                email: newuser?.email || '',
-                photoUrl: newuser?.photoURL || '',
-              },
-            })
-          })
-          .catch((err) => {
-            dispatch({
-              type: 'SET_USER',
-              payload: {
-                loading: false,
-                isLogin: false,
-                uid: '',
-                token: '',
-                name: '',
-                email: '',
-                photoUrl: '',
-              },
-            })
-          })
-      } else {
-        dispatch({
-          type: 'SET_USER',
-          payload: {
-            loading: false,
-            isLogin: false,
-            uid: '',
-            token: '',
-            name: '',
-            email: '',
-            photoUrl: '',
-          },
-        })
-      }
-    }
-    // onAuthStateChanged(auth, (resuser) => {
-
-    // })
-  }, [newuser, error, loading])
-
-  useEffect(() => {
-    setupThem()
-  }, [])
   function toggleTheme() {
     let currentTheme =
       localStorage.getItem('_crtptheme') ||
@@ -138,16 +75,36 @@ export default function Header(): JSX.Element {
       currentTheme === 'dark' ? 'light' : 'dark'
     )
   }
+  const showInstallPromotion = () => {
+    deferredPrompt.prompt()
+    deferredPrompt.userChoice.then((choiceResult: any) => {
+      if (choiceResult.outcome === 'accepted') {
+        setDeferredPrompt(false)
+      }
+    })
+  }
+  useEffect(() => {
+    setupThem()
+    const deferredPromptfunc = (e: any) => {
+      e.preventDefault()
+      setDeferredPrompt(e)
+    }
+    window.addEventListener('beforeinstallprompt', deferredPromptfunc)
+    return () => {
+      window.removeEventListener('beforeinstallprompt', deferredPromptfunc)
+    }
+  }, [])
+
   var profileIcon = (
     <>
-      {loading && (
+      {user.loading && (
         <IconButton>
           <CircularProgress size={'1.3rem'} />
         </IconButton>
       )}
 
-      {!loading &&
-        (user.name ? (
+      {!user.loading &&
+        (user.isLogin ? (
           <Link href="/profile">
             <IconButton>
               <img src={user.photoUrl} className="w-6 rounded-full" />
@@ -171,7 +128,7 @@ export default function Header(): JSX.Element {
         <div>
           <Link href="/">
             <IconButton>
-              <TravelExploreIcon />
+              <BlurCircularOutlinedIcon />
             </IconButton>
           </Link>
 
@@ -183,50 +140,21 @@ export default function Header(): JSX.Element {
           </IconButton>
           <ul className={hstyle.app_list}>
             <Link href="/todos">
-              <li className="">
+              <li className="dark:text-black">
                 <FormatListNumberedIcon />
                 <span className="text-xs">Todos</span>
               </li>
             </Link>
-            <Link href="/os">
-              <li className="">
-                <AutoFixNormalIcon />
-                <span className="text-xs">C-OS</span>
-              </li>
+            <Link href="/hevent">
+            <li className="dark:text-black">
+              <HistoryIcon />
+              <span className="text-xs whitespace-pre">H Event</span>
+            </li>
             </Link>
-            <li className="">
-              <WorkIcon />
-              <span className="text-xs">Jobs</span>
+            <li className="dark:text-black">
+              <CallSplitIcon />
+              <span className="text-xs">Incident</span>
             </li>
-            
-            {/*  <li className="">
-              <NoteIcon />
-              <span className="text-xs">Notes</span>
-            </li>
-            <li className="">
-              <FindInPageIcon />
-              <span className="text-xs">Resource</span>
-            </li>
-            <li className="">
-              <CreateIcon />
-              <span className="text-xs">Create</span>
-            </li>
-            <li className="">
-              <ShoppingCartIcon />
-              <span className="text-xs">Shop</span>
-            </li>
-            <li className="">
-              <WorkIcon />
-              <span className="text-xs">Jobs</span>
-            </li>
-            <li className="">
-              <GroupIcon />
-              <span className="text-xs">Community</span>
-            </li>
-            <li className="">
-              <MessageIcon />
-              <span className="text-xs">Message</span>
-            </li> */}
           </ul>
           {/* App list design */}
 
@@ -235,33 +163,41 @@ export default function Header(): JSX.Element {
           </IconButton>
 
           <ul className={hstyle.option_list}>
-            {user?.name && (
-              <Link href={'/about'}>
-                <li className="flex items-center">
-                  <span className="dark:text-white">
-                    <SettingsIcon />
-                  </span>
-                  <span className="mx-auto">Settings</span>
-                </li>
-              </Link>
+            {deferredPrompt && (
+              <li
+                className="flex items-center dark:text-black"
+                onClick={showInstallPromotion}
+              >
+                <span>
+                  <WebhookIcon />
+                </span>
+                <span className="mx-auto ">Add App</span>
+              </li>
             )}
+
             <Link href={'/about'}>
-              <li className="flex items-center">
-                <span className="dark:text-white">
+              <li className="flex items-center dark:text-black">
+                <span>
                   <InfoIcon />
                 </span>
                 <span className="mx-auto">About Us</span>
               </li>
             </Link>
-            <li onClick={toggleTheme} className="flex items-center">
-              <span className="dark:text-white">
+            <li
+              onClick={toggleTheme}
+              className="flex items-center dark:text-black"
+            >
+              <span>
                 <Brightness6Icon />
               </span>
               <span className="mx-auto">{themeTitle}</span>
             </li>
 
             {user?.name && (
-              <li className="flex items-center" onClick={logOut}>
+              <li
+                className="flex items-center dark:text-black"
+                onClick={logOut}
+              >
                 <LogoutIcon />
                 <span className="mx-auto">LogOut</span>
               </li>

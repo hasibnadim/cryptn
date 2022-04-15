@@ -9,11 +9,13 @@ interface props {
 const WebLayout = ({ children }: props) => {
   return (
     <WebStateProvider>
-    <main className="h-full">
-      <Header />
-      {children}
-      <Footer />
-    </main>
+      <main className="flex min-h-screen flex-col ">
+        <Header />
+        <section className=" flex-grow bg-blue-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50">
+          {children}
+        </section>
+        <Footer />
+      </main>
     </WebStateProvider>
   )
 }

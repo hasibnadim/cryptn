@@ -1,105 +1,75 @@
-
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-
 import React, { ReactElement, useEffect } from 'react'
-import Dashbord from '../../components/Profile/Dashbord'
-
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
-import DashboardIcon from '@mui/icons-material/Dashboard'
 import { useStateValue } from '../../service/Store'
-import Wallet from '../../components/Profile/Wallet'
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next/types'
 import WebLayout from '../../components/WebLayout'
+import SettingsIcon from '@mui/icons-material/Settings'
+import NotificationsIcon from '@mui/icons-material/Notifications'
+import { CircularProgress, IconButton } from '@mui/material'
+import AccountInfo from '../../components/Profile/AccountInfo'
+import Tabtitle from '../../components/Profile/Tabtitle'
+import Peoples from '../../components/Profile/tabBody/Peoples'
+import Messages from '../../components/Profile/tabBody/Messages'
+import Wallet from '../../components/Profile/tabBody/Wallet'
+import style from '../../components/Profile/style.module.css'
+import Worning from '../../components/Profile/tabBody/Worning'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  let weather = await fetch(
-    'https://api.openweathermap.org/data/2.5/weather?q=Rajshahi&appid=9a0c0149c84f4fbb789d2bf64faefd61'
-  )
-  weather = await weather.json()
-
-  return {
-    props: { weather },
-  }
-}
-
-const Profile = ({
-  weather,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const router = useRouter()
-  const { pathname, query } = router
+const Profile = () => {
   const [{ user }] = useStateValue()
+  const {
+    query: { tab },
+    push,
+  } = useRouter()
 
   useEffect(() => {
-    if (!user.loading && !user.name) {
-      router.push({
+    if (!user.loading && !user.isLogin) {
+      push({
         pathname: '/login',
         query: { warningmsg: 'Your might login first.' },
       })
     }
   }, [user.name, user.loading])
+
+  const getTabBody = () => {
+    if (tab === 'peoples') return <Peoples />
+    else if (tab === 'messages') return <Messages />
+    else return <Wallet />
+  }
   return (
-    <div className="min-h">
+    <div className=" h-full">
       <Head>
         <title>{user.name || 'Profile'}</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {user.loading && !user.name ? (
-        <h1>Loading</h1>
+      {user.loading && !user.isLogin ? (
+        <div className="mt-20  flex flex-col items-center justify-center">
+          <CircularProgress color="success" disableShrink />
+          <span>Please Wait ...</span>
+        </div>
       ) : (
-        <div className="container mx-auto md:flex">
-          <div className="flex min-w-max items-center p-4 text-center shadow md:flex-col md:shadow-none">
-            <img src={user.photoUrl} className="rounded-full md:w-40" />
-            <div className="px-4 md:px-0">
-              <p className="w-max text-2xl lg:text-3xl">{user.name}</p>
-              <p className="w-max">{user.email}</p>
+        <div className="container mx-auto h-full md:flex">
+          <AccountInfo user={user} />
+          <div className="w-full py-2 px-1 md:px-2 lg:m-2">
+            <div className="flex items-end justify-between ">
+              <IconButton>
+                <SettingsIcon fontSize="small" color="info" />
+              </IconButton>
+              <IconButton>
+                <NotificationsIcon fontSize="small" color="info" />
+              </IconButton>
             </div>
-          </div>
-          <div className="w-full py-2 md:px-2 lg:m-2">
-            <ul className="flex w-full justify-between">
-              <li
-                className="tab"
-                onClick={() =>
-                  router.replace({
-                    pathname,
-                    query: { ...query, tab: 'dashbord' },
-                  })
-                }
-              >
-                <DashboardIcon />
-                <span className="px-2">Dashbord</span>
-              </li>
-              <li
-                className="tab"
-                onClick={() =>
-                  router.replace({
-                    pathname,
-                    query: { ...query, tab: 'wallet' },
-                  })
-                }
-              >
-                <AccountBalanceWalletIcon />
-                <span className="px-2">Wallet</span>
-              </li>
-            </ul>
-            <div className="rounded-b-xl p-1 shadow-md md:p-3">
-              {(query.tab === 'dashbord' || query.tab === undefined) && (
-                <Dashbord weather={weather} />
-              )}
-              {query.tab === 'wallet' && <Wallet />}
-            </div>
+            <>
+              <Tabtitle />
+              <Worning />
+              <div className={style.body_container}>{getTabBody()}</div>
+            </>
           </div>
         </div>
       )}
     </div>
   )
 }
-Profile.getLayout=function getLayout(page:ReactElement){
-  return (
-    <WebLayout>
-      {page}
-    </WebLayout>
-  )
+Profile.getLayout = function getLayout(page: ReactElement) {
+  return <WebLayout>{page}</WebLayout>
 }
 export default Profile

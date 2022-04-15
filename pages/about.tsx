@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import React, { ReactElement } from 'react'
-import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact'
-import BusinessCenterIcon from '@mui/icons-material/BusinessCenter'
-import TravelExploreIcon from '@mui/icons-material/TravelExplore'
+
 import DoneIcon from '@mui/icons-material/Done'
 import { useStateValue } from '../service/Store'
 import WebLayout from '../components/WebLayout'
+import Banner from '../components/about/Banner'
+import Link from 'next/link'
+import { Button } from '@mui/material'
 
 const About = () => {
   const [{ siteName }] = useStateValue()
@@ -14,26 +15,8 @@ const About = () => {
       <Head>
         <title>About | {siteName}</title>
       </Head>
-      <div className="about_header">
-        <p className="pt-10 text-center text-7xl  md:pt-28 md:text-8xl">
-          {siteName}
-        </p>
-      </div>
-      <div className="container mx-auto ">
-        <div className="-mt-20 flex flex-wrap items-center justify-around lg:flex-nowrap">
-          <div className="about_card">
-            <BusinessCenterIcon fontSize="large" />
-            <h1 className="text-2xl lg:text-4xl">Grow Bussiness</h1>
-          </div>
-          <div className="about_card">
-            <ConnectWithoutContactIcon fontSize="large" />
-            <h1 className="text-2xl lg:text-4xl">Connect Society</h1>
-          </div>
-          <div className="about_card">
-            <TravelExploreIcon fontSize="large" />
-            <h1 className="text-2xl lg:text-4xl">Exploring Talent</h1>
-          </div>
-        </div>
+      <Banner />
+      <div className="container mx-auto mt-8 lg:mt-24">
         <div className="my-4 flex flex-col items-center justify-center">
           <h1 className="my-2 w-40 border-b-2 border-blue-300 py-1 px-2 text-3xl dark:border-slate-600">
             Features
@@ -69,15 +52,18 @@ const About = () => {
           <br />
           BSc in Physics.
         </div>
+        <Link href={'/support'}>
+          <a className="block  p-2">
+            <Button variant="outlined" size="large">
+              Contact Us
+            </Button>
+          </a>
+        </Link>
       </div>
     </div>
   )
 }
-About.getLayout=function getLayout(page:ReactElement){
-  return (
-    <WebLayout>
-      {page}
-    </WebLayout>
-  )
+About.getLayout = function getLayout(page: ReactElement) {
+  return <WebLayout>{page}</WebLayout>
 }
 export default About

@@ -1,0 +1,17 @@
+.todo_list_ul li{
+    @apply flex lg:text-lg font-thin my-1
+}
+.todo_list_ul li span:first-child{
+    @apply mx-1
+}
+.todays_event_block{
+    @apply mb-5 py-1 px-2 hover:shadow-md rounded
+}
+.todays_event_block .title{
+    @apply text-lg lg:text-2xl
+
+}
+.todays_event_block .body{
+    @apply text-xs lg:text-sm
+
+}
